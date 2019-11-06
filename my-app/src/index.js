@@ -1,31 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
-class Square extends React.Component {
-  
-  render() {
-    return <button className="square" onClick= {() => this.props.onClick()}>
-        {this.props.value}
-        </button>;
-  }
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick()}>
+      {this.props.value}
+    </button>
+  );
 }
 
-class Board extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            square: Array(9).fill(null),
-        };
-    }
-    renderSquare(i) {
-        return (
-          <Square
-            value={this.state.square[i]}
-            onClick={() => this.handleClick(i)}
-          />
-        );
-      }
+class Board extends Component {
+  state = {
+    squares: Array(9).fill(null),
+    xIsNext: true
+  };
+
+  handleClick(i) {
+    const squares = this.state.squares.slice();
+    squares[i] = "X";
+    this.setState({ squares: squares });
+  }
+
+  //  state is stored in the Board component instead of the individual Square components.
+  renderSquare(i) {
+    return (
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    );
+  }
 
   render() {
     const status = "Next player: X";
@@ -68,7 +73,5 @@ class Game extends React.Component {
     );
   }
 }
-
-
 
 ReactDOM.render(<Game />, document.getElementById("root"));
